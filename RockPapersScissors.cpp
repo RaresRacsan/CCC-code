@@ -7,7 +7,7 @@
 #include<string>
 
 using namespace std;
-ifstream f("level3_1.in");
+ifstream f("level3_4.in");
 ofstream g("output.txt");
 int n,m;
 
@@ -87,6 +87,20 @@ void task2(int n, int m) {
     }
 }
 
+void verifySol(string sol){
+    string newSol = "";
+    for(int i=0;i<sol.size();i+=2){
+        char w = winner(sol.substr(i,2));
+        newSol += w;
+    }
+    string newnewSol = "";
+    for(int i=0;i<newSol.size();i+=2){
+        char w = winner(newSol.substr(i,2));
+        newnewSol += w;
+    }
+    cout<<newnewSol<<endl;
+}
+
 
 int main() {
     f >> n >> m;
@@ -99,50 +113,66 @@ int main() {
         int nou1,nou2,nou3;
         f >> sir1>>sir2>>sir3;
         
-        nou1 = stoi(sir1);
-        nou2 = stoi(sir2);
-        nou3 = stoi(sir3);
+        nou1 = stoi(sir1.substr(0, sir1.size() - 1));
+        nou2 = stoi(sir2.substr(0, sir2.size() - 1));
+        nou3 = stoi(sir3.substr(0, sir3.size() - 1));
 
-        if (sir1[sir1.size() - 1] == 'R')
-            r += nou1;
-        if (sir2[sir2.size() - 1] == 'P')
-            p += nou2;
-        if (sir3[sir3.size() - 1] == 'S')
-            s += nou3;
+        if (sir1.back() == 'R') r += nou1;
+        if (sir1.back() == 'P') p += nou1;
+        if (sir1.back() == 'S') s += nou1;
+
+        if (sir2.back() == 'R') r += nou2;
+        if (sir2.back() == 'P') p += nou2;
+        if (sir2.back() == 'S') s += nou2;
+
+        if (sir3.back() == 'R') r += nou3;
+        if (sir3.back() == 'P') p += nou3;
+        if (sir3.back() == 'S') s += nou3;
         cout << r << " " << p << " " << s<<endl;
 
-        while (r >= 3)
+        string sol = "";
+        while (r >= 3 && p>0)
         {
             g << "RRRP";
-           // cout << "RRRP";
+            sol+="RRRP";
             r -= 3;
             p--;
         }
         if (r == 1 && p>=1)
         {
-            g << "RP"; p--;
+            g << "RP"; p--;r--;
+            sol += "RP";
         }
         else if (r == 2 && p>=2)
         {
-            g << "RPRP"; p -= 2;
+            g << "RPRP"; p -= 2;r-=2;
+            sol += "RPRP";
         }
-        else if (r == 2 && p <= 2)
+        else if (r == 2 && p ==1 && s>0)
         {
-            g << "RRPS";
+            g << "RPRS";
+            sol += "RRPS";
             p--;
             s--;
+            r-=2;
         }
-        while (p)
+        while (p>0)
         {
             g << "P";
+            sol += "P";
             p--;
         }
-        while (s)
+        while (s>0)
         {
             g << "S";
+            sol += "S";
             s--;
         }
+        cout<<i;
+        verifySol(sol);
         g << endl;
     }
+
 }
+
 
